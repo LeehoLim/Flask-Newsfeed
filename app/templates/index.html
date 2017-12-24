@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+	
+	<!-- Greeting -->
+	<h1>Hi, {{ current_user.username }}</h1> 
+	<!-- End Greeting -->
+
+	<!-- Write messages by user -->
+	{% for post in posts %}
+	<div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p>
+	<!-- End messages -->
+	
+	{% endfor %}
+{% endblock %}
