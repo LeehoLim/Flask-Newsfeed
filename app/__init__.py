@@ -3,9 +3,9 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy 
 from flask_migrate import Migrate 
 from flask_login import LoginManager
-from app import routes, models, errors
-from logging.handlers import SMTPHandler, RotatingFileHandler
 import logging
+from logging.handlers import SMTPHandler
+from logging.handlers import RotatingFileHandler
 import os
 
 app = Flask(__name__) #Defines Python flask application
@@ -14,8 +14,6 @@ db = SQLAlchemy(app) #Database from SQLAlchemy
 migrate = Migrate(app, db) #Handles database migrations w/ Alembic
 login = LoginManager(app) #Login with login manager
 login.login_view = 'login' #Protects and mandates login
-
-from app import routes, models
 
 if not app.debug:
 	if app.config['MAIL_SERVER']:
@@ -34,10 +32,16 @@ if not app.debug:
 		app.logger.addHandler(mail_handler)
 	if not os.path.exists('logs'):
 		os.mkdir('logs')
-		file_handler = RotatingFileHandler('logs/blog.log', maxBytes=10400, backupCount=10)
-		file_handler.setFormatter(logging.Formatter(
+	file_handler = RotatingFileHandler('logs/blog.log', maxBytes=10400, backupCount=10)
+	file_handler.setFormatter(logging.Formatter(
 			'%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
-		file_handler.setLevel(logging.INFO)
-		app.logger.addHandler(file_handler)
-		app.logger.setLevel(logging.INFO)
-		app.logger.info('Blog Start Info')
+	file_handler.setLevel(logging.INFO)
+	app.logger.addHandler(file_handler)
+	app.logger.setLevel(logging.INFO)
+	app.logger.info('Blog Start Info')
+
+
+
+from app import routes, models, errors
+
+

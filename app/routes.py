@@ -7,8 +7,16 @@ from datetime import datetime
 from app.forms import EditProfile
 
 
+#Get the time for the last time the user was seen
+@app.before_request
+def before_request():
+	if current_user.is_authenticated:
+		current_user.last_seen = datetime.utcnow()
+		db.session.commit()
+
 
 @app.route('/')
+
 @app.route('/index')
 @login_required
 #Testing the user / posts
@@ -83,7 +91,7 @@ def logout():
 @app.route('/edit_profile', methods=['GET','POST'])
 @login_required
 def edit_profile():
-	form = EditProfileForm(current_user.username)
+	form = EditProfile(current_user.username)
 	if form.validate_on_submit():
 		current_user.username = form.username.data
 		current_user.about_me = form.about_me.data
@@ -95,12 +103,6 @@ def edit_profile():
 		form.about_me.data = current_user.about_me
 	return render_template('edit_profile.html', title='Settings', form=form)
 
-#Get the time for the last time the user was seen
-@app.before_request
-def before_request():
-	if current_user.is_authenticated:
-		current_user.last_seen = datetime.utcnow()
-		db.session.commit()
 
 
 
