@@ -1,35 +1,56 @@
-<html>
-	<head>
-		<!-- Title page -->
-		{% if title %}
-		<title>{{ title }} - Blog</title> 
-		{% else %}
-		<title>Welcome to Leeho's Blog</title>
-		{% endif %}
-		<!-- End Title Page -->
-	</head>
+{% extends 'bootstrap/base.html' %}
 
-	<body>
-		<div>
-			<!-- Navar -->
-			Blog: 
-			<a href="{{ url_for('index') }}">Home</a>
-			{% if current_user.is_anonymous %}
-			<a href="{{ url_for('login') }}">Login</a>
-			{% else %}
-			<a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
-			<a href="{{ url_for('logout') }}">Logout</a>
-			{% endif %}
-			<!-- Navbar End -->
+{% block title %}
+	{% if title %}{{ title }} - Blog{% else %}Welcome to the Blog Project{% endif %}
+{% endblock %}
+
+{% block navbar %}
+	<!-- Navbar start -->
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="{{ url_for('index') }}">Blog Project</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li><a href="{{ url_for('index') }}">Home</a></li>
+				</ul>
+				<ul class="nav navbar-nav">
+					<li><a href="{{ url_for('explore') }}">Explore</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					{% if current_user.is_anonymous %}
+					<li><a href="{{ url_for('login') }}">Login</a></li>
+					{% else %}
+					<li><a href="{{ url_for('user', username=current_user.username) }}">Profile</a></li>
+					<li><a href="{{ url_for('logout') }}">Logout</a></li>
+					{% endif %}
+				</ul>
+			</div>
 		</div>
-		<hr>
+	</nav>
+	<!-- End navbar -->
+{% endblock %}
+
+{% block content %}
+	<div class="container">
 		{% with messages = get_flashed_messages() %}
-			<ul>
-				{% for message in messages %}
-				<li>{{ message }}</li>
-				{% endfor %}
-			</ul>
+		{% if messages %}
+			{% for message in messages %}
+			<div class="alert alert-info" role="alert">{{ message }}</div>
+			{% endfor %}
+		{% endif %}
 		{% endwith %}
-		{% block content %} {% endblock %}
-	</body>
-</html>
+		
+		<!-- Use this as a template and fill in beneath this for other html pages -->
+		{% block app_content %}{% endblock %}
+		<!-- Use this as a template and fill in beneath this for other html pages -->
+
+	</div>
+{% endblock %}

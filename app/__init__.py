@@ -6,7 +6,9 @@ from flask_login import LoginManager
 import logging
 from logging.handlers import SMTPHandler
 from logging.handlers import RotatingFileHandler
+from flask_bootstrap import Bootstrap
 import os
+
 
 app = Flask(__name__) #Defines Python flask application
 app.config.from_object(Config) #Configures database
@@ -14,6 +16,8 @@ db = SQLAlchemy(app) #Database from SQLAlchemy
 migrate = Migrate(app, db) #Handles database migrations w/ Alembic
 login = LoginManager(app) #Login with login manager
 login.login_view = 'login' #Protects and mandates login
+bootstrap = Bootstrap(app) #Applies bootstrap onto Flask app
+
 
 if not app.debug:
 	if app.config['MAIL_SERVER']:
