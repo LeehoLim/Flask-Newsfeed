@@ -1,0 +1,2 @@
+export PYTHON_APP=blog.py
+flask run
